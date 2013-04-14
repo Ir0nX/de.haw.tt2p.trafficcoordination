@@ -13,6 +13,7 @@ import de.haw.tt2p.trafficcoordination.game.Car;
  * a car.
  */
 public class Roxel implements Serializable {
+
 	private static final long serialVersionUID = -2645435700812910036L;
 
 	public enum Type {
@@ -29,7 +30,7 @@ public class Roxel implements Serializable {
 	private Car car;
 	private Type type;
 	private List<Integer> nextRoxels;
-	private List<Integer> previosuRoxels;
+	private List<Integer> previousRoxels;
 
 	/**
 	 * Necessary Default constructor.
@@ -37,15 +38,13 @@ public class Roxel implements Serializable {
 	public Roxel() {
 	}
 
-	public Roxel(Integer id, Integer x, Integer y, Type type, Car car, List<Integer> nextRoxels,
-		List<Integer> previousRoxels) {
+	public Roxel(Integer id, Integer x, Integer y, Type type, List<Integer> nextRoxels, List<Integer> previousRoxels) {
 		this.id = id;
 		this.x = x;
 		this.y = y;
-		setCar(car);
-		setType(type);
-		setNextRoxels(nextRoxels);
-		setPreviosuRoxels(previousRoxels);
+		this.type = type;
+		this.nextRoxels = nextRoxels;
+		this.previousRoxels = previousRoxels;
 	}
 
 	/**
@@ -86,16 +85,16 @@ public class Roxel implements Serializable {
 	}
 
 	public List<Integer> getPreviosuRoxels() {
-		return previosuRoxels;
+		return previousRoxels;
 	}
 
-	public void setPreviosuRoxels(List<Integer> previosuRoxels) {
-		this.previosuRoxels = previosuRoxels;
+	public void setPreviousRoxels(List<Integer> previousRoxels) {
+		this.previousRoxels = previousRoxels;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Roxel(%s->%s->%s)", previosuRoxels, id, nextRoxels) +
+		return String.format("Roxel(%s->%s->%s)", previousRoxels, id, nextRoxels) +
 			(hasCar() ? String.format("{%s}", car) : "");
 	}
 
@@ -107,8 +106,7 @@ public class Roxel implements Serializable {
 		this.type = type;
 	}
 
-	public Integer getRandomNextRoxelId() {
-
+	public Integer getNextRoxelId() {
 		return nextRoxels.get(new Random().nextInt(nextRoxels.size()));
 	}
 

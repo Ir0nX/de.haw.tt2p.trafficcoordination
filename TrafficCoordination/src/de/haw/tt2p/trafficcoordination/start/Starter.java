@@ -21,8 +21,8 @@ public class Starter {
 	public static void main(String[] args) {
 		IJSpace space = new UrlSpaceConfigurer("jini://*/*/traffic").space();
 		GigaSpace gigaSpace = new GigaSpaceConfigurer(space).gigaSpace();
-		new RoxelManager(gigaSpace);
-		new TrafficManager(gigaSpace, 10);
-		new GUI(gigaSpace);
+		RoxelManager roxelManager = new RoxelManager(gigaSpace);
+		TrafficManager trafficManager = new TrafficManager(gigaSpace, 10);
+		new GUI(gigaSpace, roxelManager, trafficManager);
 	}
 }

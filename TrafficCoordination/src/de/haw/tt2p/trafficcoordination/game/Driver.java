@@ -9,6 +9,7 @@ import de.haw.tt2p.trafficcoordination.topology.Roxel;
  */
 public class Driver extends Thread {
 
+	// Car refreshing speed in ms
 	private final int speed = 1000;
 	private final GigaSpace gigaSpace;
 	private final Car car;
@@ -16,11 +17,11 @@ public class Driver extends Thread {
 	public Driver(GigaSpace gigaSpace, Car car) {
 		this.gigaSpace = gigaSpace;
 		this.car = car;
-		init();
 	}
 
 	@Override
 	public void run() {
+		init();
 		while (!interrupted()) {
 			Roxel myRoxelTemplate = new Roxel();
 			myRoxelTemplate.setCar(car);
@@ -28,32 +29,32 @@ public class Driver extends Thread {
 			Roxel readMyRoxel = gigaSpace.read(myRoxelTemplate);
 			if (readMyRoxel != null) {
 				Roxel findNextTemplate = new Roxel();
-				findNextTemplate.setId(readMyRoxel.getRandomNextRoxelId());
+				findNextTemplate.setId(readMyRoxel.getNextRoxelId());
 
-				Roxel possibleNextRoxel = gigaSpace.read(findNextTemplate);
-				if (possibleNextRoxel != null && !possibleNextRoxel.hasCar()) {
-					Roxel myRoxel = gigaSpace.take(myRoxelTemplate);
-					Roxel nextRoxel = gigaSpace.take(findNextTemplate);
-
-					if (myRoxel != null) {
-						if (nextRoxel != null && !nextRoxel.hasCar()) {
-							nextRoxel.setCar(car);
+				Roxel possibleNextRoxel = gigaSpace.take(findNextTemplate);
+				if (possibleNextRoxel != null) {
+					if (!possibleNextRoxel.hasCar()) {
+						Roxel myRoxel = gigaSpace.take(myRoxelTemplate);
+						if (myRoxel != null) {
+							possibleNextRoxel.setCar(car);
 							myRoxel.removeCar();
-							log(nextRoxel);
-							gigaSpace.write(nextRoxel);
+							log(possibleNextRoxel);
 							log("test: " + gigaSpace.read(myRoxelTemplate));
+							gigaSpace.write(myRoxel);
 						} else {
-							log("nächstes roxel ist nicht frei");
+							log("Mein Roxel wird gerade benutzt");
 						}
-						gigaSpace.write(myRoxel);
 					} else {
-						log("konnte mein roxel nicht erreichen");
+						log("Nächstes Roxel ist nicht frei");
 					}
+					gigaSpace.write(possibleNextRoxel);
+				} else {
+					log("Nächstes Roxel wird gerade benutzt");
 				}
 			}
 			try {
 				// make a pause
-				Thread.sleep(speed + speed / 10 * (Math.random() < 0.5 ? 1 : -1));
+				Thread.sleep(speed);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -61,22 +62,21 @@ public class Driver extends Thread {
 	}
 
 	/**
-	 * find a free roxel and start driving
+	 * Find a free roxel and start driving.
 	 */
 	private void init() {
 		Roxel template = new Roxel();
 		template.setType(Roxel.Type.Street);
-		Roxel read = gigaSpace.take(template);
-		if (!read.hasCar()) {
-			read.setCar(car);
-			gigaSpace.write(read);
-			log("init auf " + read + " " + read.getType());
-
+		Roxel roxel = gigaSpace.take(template);
+		if (!roxel.hasCar()) {
+			roxel.setCar(car);
+			gigaSpace.write(roxel);
+			log("init auf " + roxel + " " + roxel.getType());
+			log("finished initialize");
 		} else {
-			gigaSpace.write(read);
+			gigaSpace.write(roxel);
 			init();
 		}
-		log("finished initialize");
 	}
 
 	private void log(Object msg) {

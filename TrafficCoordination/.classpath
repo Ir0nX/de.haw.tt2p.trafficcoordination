@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="lib/spring-expression-3.1.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-tx-3.1.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/JGameGrid.jar"/>
+	<classpathentry kind="lib" path="lib/guava-14.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
