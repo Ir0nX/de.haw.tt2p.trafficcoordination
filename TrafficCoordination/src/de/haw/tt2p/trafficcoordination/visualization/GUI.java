@@ -1,14 +1,20 @@
 package de.haw.tt2p.trafficcoordination.visualization;
 
+import java.util.Set;
+
 import org.openspaces.core.GigaSpace;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.GameGrid;
 import ch.aplu.jgamegrid.Location;
+
+import com.google.common.collect.Sets;
+
 import de.haw.tt2p.trafficcoordination.game.TrafficManager;
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
 import de.haw.tt2p.trafficcoordination.topology.Roxel.Type;
 import de.haw.tt2p.trafficcoordination.topology.RoxelStructure;
+import de.haw.tt2p.trafficcoordination.visualization.StreetActor.Direction;
 
 public class GUI extends GameGrid {
 
@@ -32,7 +38,22 @@ public class GUI extends GameGrid {
 			if (roxel.getType() == Type.House) {
 				actor = new HouseActor();
 			} else {
-				actor = new StreetActor();
+				Set<Direction> possibleDirections = Sets.newHashSet();
+				int x = roxel.getX();
+				// only allow down at every second street, only allow up for others
+				if (x % 6 == 0) {
+					possibleDirections.add(Direction.SOUTH);
+				} else if (x % 3 == 0) {
+					possibleDirections.add(Direction.NORTH);
+				}
+				int y = roxel.getY();
+				// only allow right at every second street, only allow left for others
+				if (y % 8 == 0) {
+					possibleDirections.add(Direction.EAST);
+				} else if (y % 4 == 0) {
+					possibleDirections.add(Direction.WEST);
+				}
+				actor = new StreetActor(possibleDirections);
 			}
 			addActor(actor, new Location(roxel.getX(), roxel.getY()));
 		}
