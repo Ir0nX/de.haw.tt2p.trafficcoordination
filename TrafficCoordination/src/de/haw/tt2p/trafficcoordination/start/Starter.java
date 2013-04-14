@@ -11,7 +11,8 @@ import de.haw.tt2p.trafficcoordination.topology.RoxelManager;
 import de.haw.tt2p.trafficcoordination.visualization.GUI;
 
 /**
- * Starts the Simulation.<br><br>
+ * Starts the Simulation. <br>
+ * <br>
  *
  * A space with name 'traffic' must already be running:<br>
  * In '\gigaspaces\bin' start 'gs-agent.bat' and 'gs.ui.bat' for deployment.
@@ -22,8 +23,6 @@ public class Starter {
 		GigaSpace gigaSpace = new GigaSpaceConfigurer(space).gigaSpace();
 		new RoxelManager(gigaSpace);
 		new TrafficManager(gigaSpace, 10);
-		// new TrafficLightManager(gigaSpace); //muss noch umgestellt werden auf
-		// NotifyContainer, da konkurrierender Zugriff auf Roxel
 		new GUI(gigaSpace);
 	}
 }

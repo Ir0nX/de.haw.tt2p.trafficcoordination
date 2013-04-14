@@ -8,10 +8,10 @@ import java.util.Map;
 import org.openspaces.core.GigaSpace;
 
 /**
- * initializes the map in tupel space
- *
+ * Initializes the map in the tupel space.
  */
 public class RoxelManager {
+
 	private final GigaSpace gigaSpace;
 
 	public RoxelManager(GigaSpace gigaSpace) {
@@ -22,7 +22,7 @@ public class RoxelManager {
 
 	private void removeOld() {
 		System.out.println("Anzahl vorhandener Roxel im Space: " + gigaSpace.count(new Roxel()));
-		System.out.println("lösche alte Tupel...");
+		System.out.println("Lösche alte Tupel...");
 		gigaSpace.takeMultiple(new Roxel());
 		System.out.println("Anzahl vorhandener Roxel im Space: " + gigaSpace.count(new Roxel()));
 		System.out.println("Lösche alte Roxel-Struktur...");
@@ -31,7 +31,7 @@ public class RoxelManager {
 	}
 
 	/**
-	 * initialize the topology map
+	 * Initializes the topology map.
 	 */
 	private void init() {
 		RoxelStructure template = new RoxelStructure();
@@ -44,26 +44,26 @@ public class RoxelManager {
 	}
 
 	/**
-	 * initializes the topology map as a grid
+	 * Initializes the topology map as a grid.
 	 *
 	 * @param height amount of rows
-	 * @param length amount of columns
+	 * @param width amount of columns
 	 */
-	private void init(int height, int length) {
-		int[][] grid = new int[length][height];
+	private void init(int height, int width) {
+		int[][] grid = new int[width][height];
 		Map<Integer, List<Integer>> forward = new HashMap<Integer, List<Integer>>();
 		Map<Integer, List<Integer>> backward = new HashMap<Integer, List<Integer>>();
 
 		// init ids
 		int id = 0;
-		for (int x = 0; x < length; x++ ) {
+		for (int x = 0; x < width; x++ ) {
 			for (int y = 0; y < height; y++ ) {
 				grid[x][y] = id++ ;
 			}
 		}
 
 		// init followers
-		for (int x = 0; x < length; x++ ) {
+		for (int x = 0; x < width; x++ ) {
 			for (int y = 0; y < height; y++ ) {
 				id = grid[x][y];
 				if (!forward.containsKey(id)) {
@@ -79,9 +79,9 @@ public class RoxelManager {
 
 				// horizontal
 				if (y % 8 == 0) {
-					forward.get(id).add(grid[(x + 1) % length][y]);
+					forward.get(id).add(grid[(x + 1) % width][y]);
 				} else if (y % 4 == 0) {
-					forward.get(id).add(grid[x == 0 ? length - 1 : (x - 1) % length][y]);
+					forward.get(id).add(grid[x == 0 ? width - 1 : (x - 1) % width][y]);
 				}
 			}
 		}
@@ -96,7 +96,7 @@ public class RoxelManager {
 		}
 
 		// init roxels
-		for (int x = 0; x < length; x++ ) {
+		for (int x = 0; x < width; x++ ) {
 			for (int y = 0; y < height; y++ ) {
 				id = grid[x][y];
 				Roxel.Type type = forward.get(id).isEmpty() ? Roxel.Type.House : Roxel.Type.Street;

@@ -11,8 +11,8 @@ public class CarActor extends Actor {
 	/**
 	 * Returns the sprite path for the given car id.
 	 *
-	 * @param id if of the car (identifies the sprite)
-	 * @return the sprite path
+	 * @param id id of the car (identifies the sprite)
+	 * @return the sprite path of the car (1 of 5 versions currently available)
 	 */
 	private static String getSprite(int id) {
 		return String.format("Sprites/car%s.png", id % 5);

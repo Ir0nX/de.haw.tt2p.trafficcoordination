@@ -15,6 +15,5 @@ public class HouseActor extends Actor {
 	private static String getSprite() {
 		long version = Math.round(Math.random()) + 1;
 		return String.format("Sprites/building%s.png", version);
-//		return "Sprites/house.png";
 	}
 }

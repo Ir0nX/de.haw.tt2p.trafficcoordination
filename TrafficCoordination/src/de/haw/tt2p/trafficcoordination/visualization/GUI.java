@@ -15,8 +15,8 @@ public class GUI extends GameGrid {
 	private final GigaSpace gigaSpace;
 
 	public GUI(GigaSpace gigaSpace) {
-		super(gigaSpace.read(new RoxelStructure()).getX(), gigaSpace.read(new RoxelStructure()).getY(),
-			gigaSpace.read(new RoxelStructure()).getSize());
+		super(gigaSpace.read(new RoxelStructure()).getX(), gigaSpace.read(new RoxelStructure()).getY(), gigaSpace.read(
+			new RoxelStructure()).getSize());
 		this.gigaSpace = gigaSpace;
 		initMap();
 		show();
