@@ -31,29 +31,28 @@ public class Driver extends Thread {
 				Roxel findNextTemplate = new Roxel();
 				findNextTemplate.setId(readMyRoxel.getNextRoxelId());
 
-				Roxel possibleNextRoxel = gigaSpace.take(findNextTemplate);
-				if (possibleNextRoxel != null) {
-					if (!possibleNextRoxel.hasCar()) {
-						Roxel myRoxel = gigaSpace.take(myRoxelTemplate);
-						if (myRoxel != null) {
-							possibleNextRoxel.setCar(car);
+				Roxel possibleNextRoxel = gigaSpace.read(findNextTemplate);
+				if (possibleNextRoxel != null && !possibleNextRoxel.hasCar()) {
+					Roxel myRoxel = gigaSpace.take(myRoxelTemplate);
+					Roxel nextRoxel = gigaSpace.take(findNextTemplate);
+					if (myRoxel != null) {
+						if (nextRoxel != null && !nextRoxel.hasCar()) {
+							nextRoxel.setCar(car);
 							myRoxel.removeCar();
-							log(possibleNextRoxel);
-							gigaSpace.write(myRoxel);
+							log(nextRoxel);
+							gigaSpace.write(nextRoxel);
 						} else {
-							log("Mein Roxel wird gerade benutzt");
+							log("Nächstes Roxel ist nicht frei!");
 						}
+						gigaSpace.write(myRoxel);
 					} else {
-						log("Nächstes Roxel ist nicht frei");
+						log("Konnte mein Roxel nicht erreichen!");
 					}
-					gigaSpace.write(possibleNextRoxel);
-				} else {
-					log("Nächstes Roxel wird gerade benutzt");
 				}
 			}
 			try {
 				// make a pause
-				Thread.sleep(speed);
+				Thread.sleep(speed + speed / 10 * (Math.random() < 0.5 ? 1 : -1));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
