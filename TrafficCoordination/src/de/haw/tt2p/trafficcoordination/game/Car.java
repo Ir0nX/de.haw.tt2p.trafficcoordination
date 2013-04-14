@@ -1,15 +1,12 @@
 package de.haw.tt2p.trafficcoordination.game;
 
-import java.io.Serializable;
-
-import com.gigaspaces.annotation.pojo.SpaceRouting;
+import com.gigaspaces.annotation.pojo.SpaceId;
 
 /**
  * Representation class of a car in the tupel space.
  */
-public class Car implements Serializable {
+public class Car{
 
-	private static final long serialVersionUID = -7612623514804615955L;
 	private Integer id;
 
 	/**
@@ -22,7 +19,7 @@ public class Car implements Serializable {
 		this.id = id;
 	}
 
-	@SpaceRouting
+	@SpaceId
 	public Integer getId() {
 		return id;
 	}

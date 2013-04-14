@@ -8,28 +8,25 @@ import ch.aplu.jgamegrid.Location;
 import de.haw.tt2p.trafficcoordination.game.TrafficManager;
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
 import de.haw.tt2p.trafficcoordination.topology.Roxel.Type;
-import de.haw.tt2p.trafficcoordination.topology.RoxelManager;
 import de.haw.tt2p.trafficcoordination.topology.RoxelStructure;
 
 public class GUI extends GameGrid {
 
-	private static final long serialVersionUID = -2041869033867768645L;
+	private static final long serialVersionUID = -3381742157631617426L;
+
 	private final GigaSpace gigaSpace;
-	private final RoxelManager roxelManager;
 	private final TrafficManager trafficManager;
 
-	public GUI(GigaSpace gigaSpace, RoxelManager roxelManager, TrafficManager trafficManager) {
+	public GUI(GigaSpace gigaSpace, TrafficManager trafficManager) {
 		super(gigaSpace.read(new RoxelStructure()).getX(), gigaSpace.read(new RoxelStructure()).getY(), gigaSpace.read(
 			new RoxelStructure()).getSize());
 		this.gigaSpace = gigaSpace;
-		this.roxelManager = roxelManager;
 		this.trafficManager = trafficManager;
 		initMap();
 		show();
 	}
 
 	private void initMap() {
-		roxelManager.init();
 		for (Roxel roxel : gigaSpace.readMultiple(new Roxel())) {
 			Actor actor;
 			if (roxel.getType() == Type.House) {

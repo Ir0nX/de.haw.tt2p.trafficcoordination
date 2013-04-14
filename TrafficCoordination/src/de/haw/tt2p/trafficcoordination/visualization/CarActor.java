@@ -4,6 +4,7 @@ import ch.aplu.jgamegrid.Actor;
 import de.haw.tt2p.trafficcoordination.game.Car;
 
 public class CarActor extends Actor {
+
 	public CarActor(Car car) {
 		super(getSprite(car.getId()));
 	}
@@ -17,4 +18,5 @@ public class CarActor extends Actor {
 	private static String getSprite(int id) {
 		return String.format("Sprites/car%s.png", id % 5);
 	}
+
 }

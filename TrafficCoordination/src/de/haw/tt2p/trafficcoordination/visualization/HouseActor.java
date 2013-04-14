@@ -3,6 +3,7 @@ package de.haw.tt2p.trafficcoordination.visualization;
 import ch.aplu.jgamegrid.Actor;
 
 public class HouseActor extends Actor {
+
 	public HouseActor() {
 		super(getSprite());
 	}
@@ -16,4 +17,5 @@ public class HouseActor extends Actor {
 		long version = Math.round(Math.random()) + 1;
 		return String.format("Sprites/building%s.png", version);
 	}
+
 }

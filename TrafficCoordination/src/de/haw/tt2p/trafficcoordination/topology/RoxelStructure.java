@@ -1,12 +1,13 @@
 package de.haw.tt2p.trafficcoordination.topology;
 
-import com.gigaspaces.annotation.pojo.SpaceRouting;
+import com.gigaspaces.annotation.pojo.SpaceId;
 
 /**
  * Roxel structure describes the map topology.
  *
  */
 public class RoxelStructure {
+
 	private Integer id;
 	private Integer x;
 	private Integer y;
@@ -25,7 +26,7 @@ public class RoxelStructure {
 		this.size = size;
 	}
 
-	@SpaceRouting
+	@SpaceId
 	public Integer getId() {
 		return id;
 	}

@@ -1,10 +1,9 @@
 package de.haw.tt2p.trafficcoordination.topology;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-import com.gigaspaces.annotation.pojo.SpaceRouting;
+import com.gigaspaces.annotation.pojo.SpaceId;
 
 import de.haw.tt2p.trafficcoordination.game.Car;
 
@@ -12,16 +11,10 @@ import de.haw.tt2p.trafficcoordination.game.Car;
  * Roxels are the grid components of the map. They have specific types/functionality and may contain
  * a car.
  */
-public class Roxel implements Serializable {
-
-	private static final long serialVersionUID = -2645435700812910036L;
+public class Roxel {
 
 	public enum Type {
 		Street, House;
-	}
-
-	public enum Scheduling {
-		TBD, FREE;
 	}
 
 	private Integer id;
@@ -47,11 +40,7 @@ public class Roxel implements Serializable {
 		this.previousRoxels = previousRoxels;
 	}
 
-	/**
-	 * The id of this message. We will use this attribute to route the message objects when they are
-	 * written to the space, defined in the Message.gs.xml file.
-	 */
-	@SpaceRouting
+	@SpaceId
 	public Integer getId() {
 		return id;
 	}
@@ -124,10 +113,6 @@ public class Roxel implements Serializable {
 
 	public void removeCar() {
 		car = null;
-	}
-
-	public boolean isIntersection() {
-		return nextRoxels.size() > 1;
 	}
 
 }
