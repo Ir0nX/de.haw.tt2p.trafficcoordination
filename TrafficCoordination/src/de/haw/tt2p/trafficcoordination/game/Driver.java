@@ -39,7 +39,6 @@ public class Driver extends Thread {
 							possibleNextRoxel.setCar(car);
 							myRoxel.removeCar();
 							log(possibleNextRoxel);
-							log("test: " + gigaSpace.read(myRoxelTemplate));
 							gigaSpace.write(myRoxel);
 						} else {
 							log("Mein Roxel wird gerade benutzt");
@@ -80,6 +79,6 @@ public class Driver extends Thread {
 	}
 
 	private void log(Object msg) {
-		System.out.println(car + "=>" + msg);
+		System.out.println(car + " => " + msg);
 	}
 }

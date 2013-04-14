@@ -81,12 +81,6 @@ public class Roxel {
 		this.previousRoxels = previousRoxels;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Roxel(%s->%s->%s)", previousRoxels, id, nextRoxels) +
-			(hasCar() ? String.format("{%s}", car) : "");
-	}
-
 	public Type getType() {
 		return type;
 	}
@@ -113,6 +107,12 @@ public class Roxel {
 
 	public void removeCar() {
 		car = null;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Roxel(%s->%s->%s)", previousRoxels, id, nextRoxels) +
+			(hasCar() ? String.format("{%s}", car) : "");
 	}
 
 }
