@@ -3,6 +3,7 @@ package de.haw.tt2p.trafficcoordination.game;
 import org.openspaces.core.GigaSpace;
 
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
+import de.haw.tt2p.trafficcoordination.visualization.RoxelUpdate;
 
 /**
  * The driver is controlling his specific car and drives it in the world.
@@ -33,6 +34,8 @@ public class Driver extends Thread {
 				if (!nextRoxel.hasCar()) {
 					myRoxel.removeCar();
 					nextRoxel.setCar(car);
+					// write roxel update for the gui
+					gigaSpace.write(new RoxelUpdate(car.getId(), myRoxel.getX(), myRoxel.getY(), nextRoxel.getX(), nextRoxel.getY()));
 				}
 				gigaSpace.write(myRoxel);
 				gigaSpace.write(nextRoxel);
@@ -40,7 +43,7 @@ public class Driver extends Thread {
 
 			try {
 				// make a pause
-				Thread.sleep(speed + speed / 10 * (Math.random() < 0.5 ? 1 : -1));
+				Thread.sleep(speed);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -57,7 +60,7 @@ public class Driver extends Thread {
 		if (!roxel.hasCar()) {
 			roxel.setCar(car);
 			gigaSpace.write(roxel);
-			log("init auf " + roxel + " " + roxel.getType());
+			gigaSpace.write(new RoxelUpdate(car.getId(), -1, -1, roxel.getX(), roxel.getY()));
 			log("finished initialize");
 		} else {
 			gigaSpace.write(roxel);

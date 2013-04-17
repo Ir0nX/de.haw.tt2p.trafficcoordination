@@ -11,7 +11,8 @@ import com.google.common.collect.Sets;
  */
 public class TrafficManager {
 
-	Set<Driver> drivers = Sets.newHashSet();
+	private boolean isRunning = false;
+	private final Set<Driver> drivers = Sets.newHashSet();
 
 	public TrafficManager(GigaSpace gigaSpace, int amountOfCars) {
 		for (int i = 0; i < amountOfCars; i++ ) {
@@ -22,8 +23,11 @@ public class TrafficManager {
 	}
 
 	public void startDrivers() {
-		for (Driver driver : drivers) {
-			driver.start();
+		if (!isRunning) {
+			for (Driver driver : drivers) {
+				driver.start();
+			}
+			isRunning = true;
 		}
 	}
 
