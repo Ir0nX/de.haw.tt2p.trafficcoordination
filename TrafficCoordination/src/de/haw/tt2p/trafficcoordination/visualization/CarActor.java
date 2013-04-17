@@ -1,12 +1,11 @@
 package de.haw.tt2p.trafficcoordination.visualization;
 
 import ch.aplu.jgamegrid.Actor;
-import de.haw.tt2p.trafficcoordination.game.Car;
 
 public class CarActor extends Actor {
 
-	public CarActor(Car car) {
-		super(getSprite(car.getId()));
+	public CarActor(int carId) {
+		super(getSprite(carId));
 	}
 
 	/**

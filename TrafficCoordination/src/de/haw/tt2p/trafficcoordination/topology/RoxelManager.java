@@ -30,7 +30,7 @@ public class RoxelManager {
 		RoxelStructure template = new RoxelStructure();
 		RoxelStructure roxelStructure = gigaSpace.read(template);
 		if (roxelStructure == null) {
-			roxelStructure = new RoxelStructure(1, 15, 15, 64);
+			roxelStructure = new RoxelStructure(1, 10, 10, 64);
 			gigaSpace.write(roxelStructure);
 		}
 		init(roxelStructure.getX(), roxelStructure.getY());

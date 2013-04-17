@@ -9,6 +9,7 @@ import ch.aplu.jgamegrid.GameGrid;
 import ch.aplu.jgamegrid.Location;
 
 import com.google.common.collect.Sets;
+import com.j_spaces.core.client.SQLQuery;
 
 import de.haw.tt2p.trafficcoordination.game.TrafficManager;
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
@@ -57,19 +58,18 @@ public class GUI extends GameGrid {
 			}
 			addActor(actor, new Location(roxel.getX(), roxel.getY()));
 		}
-		trafficManager.startDrivers();
 	}
 
 	@Override
 	public void act() {
+		trafficManager.startDrivers();
 		removeActors(CarActor.class);
 		Roxel template = new Roxel();
 		template.setType(Type.Street);
-		for (Roxel roxel : gigaSpace.readMultiple(template)) {
-			if (roxel.hasCar()) {
-				CarActor car = new CarActor(roxel.getCar());
-				addActor(car, new Location(roxel.getX(), roxel.getY()));
-			}
+		SQLQuery<Roxel> query = new SQLQuery<Roxel>(Roxel.class, "carId > -1");
+		for (Roxel roxel : gigaSpace.readMultiple(query)) {
+			CarActor car = new CarActor(roxel.getCarId());
+			addActor(car, new Location(roxel.getX(), roxel.getY()));
 		}
 	}
 
