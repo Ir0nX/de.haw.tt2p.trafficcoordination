@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.openspaces.core.GigaSpace;
+import org.openspaces.core.space.UrlSpaceConfigurer;
 import org.openspaces.events.polling.SimplePollingContainerConfigurer;
 import org.openspaces.events.polling.SimplePollingEventListenerContainer;
 
@@ -30,7 +31,7 @@ public class GUI extends GameGrid implements IGUIUpdater {
 
 	private SimplePollingEventListenerContainer roxelPollingContainer;
 
-	public GUI(GigaSpace gigaSpace, TrafficManager trafficManager) {
+	public GUI(GigaSpace gigaSpace, final UrlSpaceConfigurer urlSpaceConfigurer, TrafficManager trafficManager) {
 		super(gigaSpace.read(new RoxelStructure()).getX(), gigaSpace.read(new RoxelStructure()).getY(), gigaSpace.read(
 			new RoxelStructure()).getSize());
 		this.gigaSpace = gigaSpace;
@@ -47,6 +48,14 @@ public class GUI extends GameGrid implements IGUIUpdater {
 				if (roxelPollingContainer != null) {
 					roxelPollingContainer.destroy();
 					System.out.println("PollingContainer for Roxels removed");
+				}
+				if (urlSpaceConfigurer != null) {
+					try {
+						urlSpaceConfigurer.destroy();
+						System.out.println("Destroyed thread and memory resources");
+					} catch (Exception e) {
+						System.out.println("WARNING: Could not destroy thread and memory resources!");
+					}
 				}
 				return true;
 			}

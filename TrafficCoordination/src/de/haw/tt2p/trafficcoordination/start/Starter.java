@@ -20,12 +20,13 @@ import de.haw.tt2p.trafficcoordination.visualization.GUI;
 public class Starter {
 
 	public static void main(String[] args) {
-		IJSpace space = new UrlSpaceConfigurer("jini://*/*/traffic").space();
+		UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer("jini://*/*/traffic");
+		IJSpace space = urlSpaceConfigurer.space();
 		GigaSpace gigaSpace = new GigaSpaceConfigurer(space).gigaSpace();
 		RoxelManager roxelManager = new RoxelManager(gigaSpace);
 		roxelManager.init();
 		TrafficManager trafficManager = new TrafficManager(gigaSpace, 10);
-		new GUI(gigaSpace, trafficManager);
+		new GUI(gigaSpace, urlSpaceConfigurer, trafficManager);
 	}
 
 }

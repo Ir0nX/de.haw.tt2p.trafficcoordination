@@ -71,7 +71,7 @@ public class Roxel {
 		this.nextRoxels = nextRoxels;
 	}
 
-	public List<Integer> getPreviosuRoxels() {
+	public List<Integer> getPreviousRoxels() {
 		return previousRoxels;
 	}
 
