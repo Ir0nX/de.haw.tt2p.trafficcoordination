@@ -5,8 +5,6 @@ import java.util.Random;
 
 import com.gigaspaces.annotation.pojo.SpaceId;
 
-import de.haw.tt2p.trafficcoordination.game.Car;
-
 /**
  * Roxels are the grid components of the map. They have specific types/functionality and may contain
  * a car.
@@ -20,7 +18,7 @@ public class Roxel {
 	private Integer id;
 	private Integer x;
 	private Integer y;
-	private Car car;
+	private Integer currentCarId;
 	private Type type;
 	private List<Integer> nextRoxels;
 	private List<Integer> previousRoxels;
@@ -89,30 +87,29 @@ public class Roxel {
 		this.type = type;
 	}
 
+	public Integer getCurrentCarId() {
+		return currentCarId;
+	}
+
+	public Boolean hasCar() {
+		return currentCarId != null;
+	}
+
+	public void removeCar() {
+		currentCarId = null;
+	}
+
+	public void setCurrentCarId(Integer currentCarId) {
+		this.currentCarId = currentCarId;
+	}
+
 	public Integer getNextRoxelId() {
 		return nextRoxels.get(new Random().nextInt(nextRoxels.size()));
 	}
 
-	public Car getCar() {
-		return car;
-	}
-
-	public void setCar(Car car) {
-		this.car = car;
-	}
-
-	public boolean hasCar() {
-		return car != null;
-	}
-
-	public void removeCar() {
-		car = null;
-	}
-
 	@Override
 	public String toString() {
-		return String.format("Roxel(%s->%s->%s)", previousRoxels, id, nextRoxels) +
-			(hasCar() ? String.format("{%s}", car) : "");
+		return String.format("Roxel(%s->%s->%s)", previousRoxels, id, nextRoxels);
 	}
 
 }

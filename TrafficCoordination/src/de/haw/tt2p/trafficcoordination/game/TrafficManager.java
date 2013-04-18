@@ -15,10 +15,8 @@ public class TrafficManager {
 	private final Set<Driver> drivers = Sets.newHashSet();
 
 	public TrafficManager(GigaSpace gigaSpace, int amountOfCars) {
-		for (int i = 0; i < amountOfCars; i++ ) {
-			Car car = new Car(i);
-			gigaSpace.write(car);
-			drivers.add(new Driver(gigaSpace, car));
+		for (int id = 0; id < amountOfCars; id++ ) {
+			drivers.add(new Driver(gigaSpace, id));
 		}
 	}
 

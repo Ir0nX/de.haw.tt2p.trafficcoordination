@@ -13,11 +13,11 @@ public class Driver extends Thread {
 	// Car refreshing speed in ms
 	private final int speed = 1000;
 	private final GigaSpace gigaSpace;
-	private final Car car;
+	private final Integer carId;
 
-	public Driver(GigaSpace gigaSpace, Car car) {
+	public Driver(GigaSpace gigaSpace, Integer carId) {
 		this.gigaSpace = gigaSpace;
-		this.car = car;
+		this.carId = carId;
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class Driver extends Thread {
 		init();
 		while (!interrupted()) {
 			Roxel myRoxelTemplate = new Roxel();
-			myRoxelTemplate.setCar(car);
+			myRoxelTemplate.setCurrentCarId(carId);
 			Roxel myRoxel = gigaSpace.take(myRoxelTemplate);
 			if (myRoxel != null) {
 				Roxel findNextTemplate = new Roxel();
@@ -33,9 +33,9 @@ public class Driver extends Thread {
 				Roxel nextRoxel = gigaSpace.take(findNextTemplate, Integer.MAX_VALUE);
 				if (!nextRoxel.hasCar()) {
 					myRoxel.removeCar();
-					nextRoxel.setCar(car);
+					nextRoxel.setCurrentCarId(carId);
 					// write roxel update for the gui
-					gigaSpace.write(new RoxelUpdate(car.getId(), myRoxel.getX(), myRoxel.getY(), nextRoxel.getX(), nextRoxel.getY()));
+					gigaSpace.write(new RoxelUpdate(carId, myRoxel.getX(), myRoxel.getY(), nextRoxel.getX(), nextRoxel.getY()));
 				}
 				gigaSpace.write(myRoxel);
 				gigaSpace.write(nextRoxel);
@@ -58,9 +58,9 @@ public class Driver extends Thread {
 		template.setType(Roxel.Type.Street);
 		Roxel roxel = gigaSpace.take(template);
 		if (!roxel.hasCar()) {
-			roxel.setCar(car);
+			roxel.setCurrentCarId(carId);
 			gigaSpace.write(roxel);
-			gigaSpace.write(new RoxelUpdate(car.getId(), -1, -1, roxel.getX(), roxel.getY()));
+			gigaSpace.write(new RoxelUpdate(carId, -1, -1, roxel.getX(), roxel.getY()));
 			log("finished initialize");
 		} else {
 			gigaSpace.write(roxel);
@@ -69,6 +69,6 @@ public class Driver extends Thread {
 	}
 
 	private void log(Object msg) {
-		System.out.println(car + " => " + msg);
+		System.out.println("Car " + carId + " => " + msg);
 	}
 }
