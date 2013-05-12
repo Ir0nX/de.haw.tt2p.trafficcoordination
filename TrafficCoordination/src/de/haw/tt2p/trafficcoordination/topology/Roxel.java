@@ -1,7 +1,6 @@
 package de.haw.tt2p.trafficcoordination.topology;
 
-import java.util.List;
-import java.util.Random;
+import java.util.Set;
 
 import com.gigaspaces.annotation.pojo.SpaceId;
 
@@ -12,7 +11,11 @@ import com.gigaspaces.annotation.pojo.SpaceId;
 public class Roxel {
 
 	public enum Type {
-		Street, House;
+		STREET, HOUSE;
+	}
+
+	public enum Direction {
+		NORTH, EAST, SOUTH, WEST;
 	}
 
 	private Integer id;
@@ -20,20 +23,21 @@ public class Roxel {
 	private Integer y;
 	private Integer currentCarId;
 	private Type type;
-	private List<Integer> nextRoxels;
+	private Set<Direction> possibleDirections;
 
 	/**
 	 * Necessary Default constructor.
 	 */
 	public Roxel() {
+		// nothing to do
 	}
 
-	public Roxel(Integer id, Integer x, Integer y, Type type, List<Integer> nextRoxels) {
+	public Roxel(Integer id, Integer x, Integer y, Type type, Set<Direction> possibleDirections) {
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.type = type;
-		this.nextRoxels = nextRoxels;
+		this.possibleDirections = possibleDirections;
 	}
 
 	@SpaceId
@@ -61,14 +65,6 @@ public class Roxel {
 		this.y = y;
 	}
 
-	public List<Integer> getNextRoxels() {
-		return nextRoxels;
-	}
-
-	public void setNextRoxels(List<Integer> nextRoxels) {
-		this.nextRoxels = nextRoxels;
-	}
-
 	public Type getType() {
 		return type;
 	}
@@ -93,13 +89,17 @@ public class Roxel {
 		this.currentCarId = currentCarId;
 	}
 
-	public Integer getNextRoxelId() {
-		return nextRoxels.get(new Random().nextInt(nextRoxels.size()));
+	public Set<Direction> getPossibleDirections() {
+		return possibleDirections;
+	}
+
+	public void setPossibleDirections(Set<Direction> possibleDirections) {
+		this.possibleDirections = possibleDirections;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Roxel(%s->%s->%s)", id, nextRoxels);
+		return String.format("Roxel(%s->%s->%s)", id, possibleDirections);
 	}
 
 }

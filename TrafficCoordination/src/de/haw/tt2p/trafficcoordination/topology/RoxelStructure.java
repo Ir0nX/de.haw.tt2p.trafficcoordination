@@ -9,21 +9,22 @@ import com.gigaspaces.annotation.pojo.SpaceId;
 public class RoxelStructure {
 
 	private Integer id;
-	private Integer x;
-	private Integer y;
-	private Integer size;
+	private Integer width;
+	private Integer height;
+	private Integer pixelSize;
 
 	/**
 	 * Necessary Default constructor.
 	 */
 	public RoxelStructure() {
+		// nothing to do
 	}
 
-	public RoxelStructure(Integer id, Integer x, Integer y, Integer size) {
+	public RoxelStructure(Integer id, Integer width, Integer height, Integer pixelSize) {
 		this.id = id;
-		this.y = y;
-		this.x = x;
-		this.size = size;
+		this.height = height;
+		this.width = width;
+		this.pixelSize = pixelSize;
 	}
 
 	@SpaceId
@@ -41,31 +42,31 @@ public class RoxelStructure {
 
 	@Override
 	public String toString() {
-		return String.format("RoxelStructure(Dimension(%s, %s), Size(%s))", x, y, size);
+		return String.format("RoxelStructure(Dimension(%s, %s), Size(%s))", width, height, pixelSize);
 	}
 
-	public Integer getX() {
-		return x;
+	public Integer getWidth() {
+		return width;
 	}
 
-	public void setX(Integer x) {
-		this.x = x;
+	public void setWidth(Integer newWidth) {
+		this.width = newWidth;
 	}
 
-	public Integer getY() {
-		return y;
+	public Integer getHeight() {
+		return height;
 	}
 
-	public void setY(Integer y) {
-		this.y = y;
+	public void setHeight(Integer newHeight) {
+		this.height = newHeight;
 	}
 
-	public Integer getSize() {
-		return size;
+	public Integer getPixelSize() {
+		return pixelSize;
 	}
 
-	public void setSize(Integer size) {
-		this.size = size;
+	public void setPixelSize(Integer newPixelSize) {
+		this.pixelSize = newPixelSize;
 	}
 
 }

@@ -3,12 +3,9 @@ package de.haw.tt2p.trafficcoordination.visualization;
 import java.util.Set;
 
 import ch.aplu.jgamegrid.Actor;
+import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
 
 public class StreetActor extends Actor {
-
-	public enum Direction {
-		NORTH, EAST, SOUTH, WEST;
-	}
 
 	public StreetActor(Set<Direction> possibleDirections) {
 		super(getSprite(possibleDirections));

@@ -1,12 +1,12 @@
 package de.haw.tt2p.trafficcoordination.topology;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.openspaces.core.GigaSpace;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
+import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
 
 /**
  * Creates a manager which manages the roxel structure and all roxels.
@@ -32,7 +32,7 @@ public class RoxelManager {
 			roxelStructure = new RoxelStructure(1, 10, 10, 64);
 			gigaSpace.write(roxelStructure);
 		}
-		init(roxelStructure.getX(), roxelStructure.getY());
+		init(roxelStructure.getWidth(), roxelStructure.getHeight());
 	}
 
 	/**
@@ -56,7 +56,6 @@ public class RoxelManager {
 	 */
 	private void init(int height, int width) {
 		int[][] grid = new int[width][height];
-		Map<Integer, List<Integer>> forward = Maps.newHashMap();
 
 		// init ids
 		int id = 0;
@@ -70,56 +69,29 @@ public class RoxelManager {
 		for (int x = 0; x < width; x++ ) {
 			for (int y = 0; y < height; y++ ) {
 				id = grid[x][y];
-				if (!forward.containsKey(id)) {
-					forward.put(id, new ArrayList<Integer>());
-				}
+				Set<Direction> possibleDirections = Sets.newHashSet();
 
-				List<Integer> forwardList = forward.get(id);
 				// vertical
-				// every vertical direction allowed
-//				if (x % 3 == 0) {
-//					List<Integer> forwardList = forward.get(id);
-//					// up
-//					forwardList.add(grid[x][y == 0 ? height - 1 : y - 1]);
-//					// down
-//					forwardList.add(grid[x][(y + 1) % height]);
-//				}
 				// only allow down at every second street, only allow up for others
 				if (x % 6 == 0) {
-					forwardList.add(grid[x][(y + 1) % height]);
+					possibleDirections.add(Direction.SOUTH);
 				} else if (x % 3 == 0) {
-					forwardList.add(grid[x][y == 0 ? height - 1 : y - 1]);
+					possibleDirections.add(Direction.NORTH);
 				}
 
 				// horizontal
-				// every horizontal direction allowed
-//				if (y % 4 == 0) {
-//					// right
-//					forwardList.add(grid[(x + 1) % width][y]);
-//					// left
-//					forwardList.add(grid[x == 0 ? width - 1 : x - 1][y]);
-//				}
 				// only allow right at every second street, only allow left for others
 				if (y % 8 == 0) {
-					forward.get(id).add(grid[(x + 1) % width][y]);
+					possibleDirections.add(Direction.EAST);
 				} else if (y % 4 == 0) {
-					forward.get(id).add(grid[x == 0 ? width - 1 : x - 1][y]);
+					possibleDirections.add(Direction.WEST);
 				}
-			}
-		}
 
-		// init roxels
-		for (int x = 0; x < width; x++ ) {
-			for (int y = 0; y < height; y++ ) {
-				id = grid[x][y];
-				Roxel.Type type = forward.get(id).isEmpty() ? Roxel.Type.House : Roxel.Type.Street;
-				Roxel roxel = new Roxel(id, x, y, type, forward.get(id));
+				Roxel.Type type = possibleDirections.isEmpty() ? Roxel.Type.HOUSE : Roxel.Type.STREET;
+				Roxel roxel = new Roxel(id, x, y, type, possibleDirections);
 				gigaSpace.write(roxel);
-				System.out.print(roxel);
 			}
-			System.out.println();
 		}
-		System.out.println("Roxel grid initiated");
 	}
 
 }
