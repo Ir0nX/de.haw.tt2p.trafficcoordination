@@ -21,7 +21,6 @@ public class Roxel {
 	private Integer currentCarId;
 	private Type type;
 	private List<Integer> nextRoxels;
-	private List<Integer> previousRoxels;
 
 	/**
 	 * Necessary Default constructor.
@@ -29,13 +28,12 @@ public class Roxel {
 	public Roxel() {
 	}
 
-	public Roxel(Integer id, Integer x, Integer y, Type type, List<Integer> nextRoxels, List<Integer> previousRoxels) {
+	public Roxel(Integer id, Integer x, Integer y, Type type, List<Integer> nextRoxels) {
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.type = type;
 		this.nextRoxels = nextRoxels;
-		this.previousRoxels = previousRoxels;
 	}
 
 	@SpaceId
@@ -71,14 +69,6 @@ public class Roxel {
 		this.nextRoxels = nextRoxels;
 	}
 
-	public List<Integer> getPreviousRoxels() {
-		return previousRoxels;
-	}
-
-	public void setPreviousRoxels(List<Integer> previousRoxels) {
-		this.previousRoxels = previousRoxels;
-	}
-
 	public Type getType() {
 		return type;
 	}
@@ -109,7 +99,7 @@ public class Roxel {
 
 	@Override
 	public String toString() {
-		return String.format("Roxel(%s->%s->%s)", previousRoxels, id, nextRoxels);
+		return String.format("Roxel(%s->%s->%s)", id, nextRoxels);
 	}
 
 }

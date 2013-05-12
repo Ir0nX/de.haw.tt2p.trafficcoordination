@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.openspaces.core.GigaSpace;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -58,7 +57,6 @@ public class RoxelManager {
 	private void init(int height, int width) {
 		int[][] grid = new int[width][height];
 		Map<Integer, List<Integer>> forward = Maps.newHashMap();
-		Map<Integer, List<Integer>> backward = Maps.newHashMap();
 
 		// init ids
 		int id = 0;
@@ -110,23 +108,12 @@ public class RoxelManager {
 			}
 		}
 
-		for (Integer currentRoxelId : forward.keySet()) {
-			for (Integer followingRoxelId : forward.get(currentRoxelId)) {
-				if (!backward.containsKey(followingRoxelId)) {
-					backward.put(followingRoxelId, new ArrayList<Integer>());
-				}
-				backward.get(followingRoxelId).add(currentRoxelId);
-			}
-		}
-
 		// init roxels
 		for (int x = 0; x < width; x++ ) {
 			for (int y = 0; y < height; y++ ) {
 				id = grid[x][y];
 				Roxel.Type type = forward.get(id).isEmpty() ? Roxel.Type.House : Roxel.Type.Street;
-				List<Integer> backwardList = backward.get(id);
-				Roxel roxel = new Roxel(id, x, y, type, forward.get(id),
-					backwardList == null ? Lists.<Integer>newArrayList() : backwardList);
+				Roxel roxel = new Roxel(id, x, y, type, forward.get(id));
 				gigaSpace.write(roxel);
 				System.out.print(roxel);
 			}
