@@ -15,7 +15,7 @@ public class Roxel {
 	}
 
 	public enum Direction {
-		NORTH, EAST, SOUTH, WEST;
+		EAST, SOUTH, TODECIDE;
 	}
 
 	private Integer id;
@@ -24,6 +24,8 @@ public class Roxel {
 	private Integer currentCarId;
 	private Type type;
 	private Set<Direction> possibleDirections;
+	private Direction currentDirection;
+	private Boolean isCrossroad;
 
 	/**
 	 * Necessary Default constructor.
@@ -38,6 +40,8 @@ public class Roxel {
 		this.y = y;
 		this.type = type;
 		this.possibleDirections = possibleDirections;
+		resetCurrentDirection();
+		isCrossroad = possibleDirections.size() > 1;
 	}
 
 	@SpaceId
@@ -77,16 +81,16 @@ public class Roxel {
 		return currentCarId;
 	}
 
+	public void setCurrentCarId(Integer currentCarId) {
+		this.currentCarId = currentCarId;
+	}
+
 	public Boolean hasCar() {
 		return currentCarId != null;
 	}
 
 	public void removeCar() {
 		currentCarId = null;
-	}
-
-	public void setCurrentCarId(Integer currentCarId) {
-		this.currentCarId = currentCarId;
 	}
 
 	public Set<Direction> getPossibleDirections() {
@@ -97,9 +101,37 @@ public class Roxel {
 		this.possibleDirections = possibleDirections;
 	}
 
+	public Direction getCurrentDirection() {
+		return currentDirection;
+	}
+
+	public void setCurrentDirection(Direction currentDirection) {
+		this.currentDirection = currentDirection;
+	}
+
+	public Boolean isCrossroad() {
+		return isCrossroad;
+	}
+
+	public void setCrossroad(Boolean isCrossroad) {
+		this.isCrossroad = isCrossroad;
+	}
+
+	/**
+	 * Resets the current direction of this roxel to TODECIDE if it is a crossroad,
+	 * otherwise it will set the direction from the possible directions (which should only be one).
+	 */
+	public void resetCurrentDirection() {
+		if (possibleDirections.size() == 1) {
+			currentDirection = possibleDirections.iterator().next();
+		} else if (possibleDirections.size() > 1){
+			currentDirection = Direction.TODECIDE;
+		}
+	}
+
 	@Override
 	public String toString() {
-		return String.format("Roxel(%s->%s->%s)", id, possibleDirections);
+		return String.format("Roxel(%s->%s)", id, currentDirection);
 	}
 
 }

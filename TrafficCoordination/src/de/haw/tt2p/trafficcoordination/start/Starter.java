@@ -25,7 +25,7 @@ public class Starter {
 		GigaSpace gigaSpace = new GigaSpaceConfigurer(space).gigaSpace();
 		RoxelManager roxelManager = new RoxelManager(gigaSpace);
 		roxelManager.init();
-		TrafficManager trafficManager = new TrafficManager(gigaSpace, 10);
+		TrafficManager trafficManager = new TrafficManager(gigaSpace, 20);
 		new GUI(gigaSpace, urlSpaceConfigurer, trafficManager);
 	}
 

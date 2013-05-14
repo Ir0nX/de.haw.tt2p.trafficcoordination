@@ -44,6 +44,7 @@ public class GUI extends GameGrid implements IGUIUpdater {
 					roxelPollingContainer.destroy();
 					System.out.println("PollingContainer for Roxels removed");
 				}
+				GUI.this.trafficManager.dispose();
 				if (urlSpaceConfigurer != null) {
 					try {
 						urlSpaceConfigurer.destroy();

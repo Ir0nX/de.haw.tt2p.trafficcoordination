@@ -18,18 +18,8 @@ public class StreetActor extends Actor {
 	 */
 	private static String getSprite(Set<Direction> possibleDirections) {
 		String path = "Sprites/street.jpg";
-		if (possibleDirections.contains(Direction.NORTH)) {
-			if (possibleDirections.contains(Direction.EAST)) {
-				path = "Sprites/northEast.jpg";
-			} else if (possibleDirections.contains(Direction.WEST)) {
-				path = "Sprites/northWest.jpg";
-			}
-		} else if (possibleDirections.contains(Direction.SOUTH)) {
-			if (possibleDirections.contains(Direction.EAST)) {
-				path = "Sprites/southEast.jpg";
-			} else if (possibleDirections.contains(Direction.WEST)) {
-				path = "Sprites/southWest.jpg";
-			}
+		if (possibleDirections.contains(Direction.EAST) && possibleDirections.contains(Direction.SOUTH)) {
+			path = "Sprites/southEast.jpg";
 		}
 		return path;
 	}

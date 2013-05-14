@@ -29,7 +29,7 @@ public class RoxelManager {
 		RoxelStructure template = new RoxelStructure();
 		RoxelStructure roxelStructure = gigaSpace.read(template);
 		if (roxelStructure == null) {
-			roxelStructure = new RoxelStructure(1, 10, 10, 64);
+			roxelStructure = new RoxelStructure(1, 12, 12, 64);
 			gigaSpace.write(roxelStructure);
 		}
 		init(roxelStructure.getWidth(), roxelStructure.getHeight());
@@ -69,29 +69,28 @@ public class RoxelManager {
 		for (int x = 0; x < width; x++ ) {
 			for (int y = 0; y < height; y++ ) {
 				id = grid[x][y];
-				Set<Direction> possibleDirections = Sets.newHashSet();
-
-				// vertical
-				// only allow down at every second street, only allow up for others
-				if (x % 6 == 0) {
-					possibleDirections.add(Direction.SOUTH);
-				} else if (x % 3 == 0) {
-					possibleDirections.add(Direction.NORTH);
-				}
-
-				// horizontal
-				// only allow right at every second street, only allow left for others
-				if (y % 8 == 0) {
-					possibleDirections.add(Direction.EAST);
-				} else if (y % 4 == 0) {
-					possibleDirections.add(Direction.WEST);
-				}
-
+				Set<Direction> possibleDirections = getPossibleDirections(x, y);
 				Roxel.Type type = possibleDirections.isEmpty() ? Roxel.Type.HOUSE : Roxel.Type.STREET;
 				Roxel roxel = new Roxel(id, x, y, type, possibleDirections);
 				gigaSpace.write(roxel);
 			}
 		}
+	}
+
+	private Set<Direction> getPossibleDirections(int x, int y) {
+		Set<Direction> possibleDirections = Sets.newHashSet();
+
+		// vertical (only south direction)
+		if (x % 3 == 0) {
+			possibleDirections.add(Direction.SOUTH);
+		}
+
+		// horizontal (only east direction)
+		if (y % 4 == 0) {
+			possibleDirections.add(Direction.EAST);
+		}
+
+		return possibleDirections;
 	}
 
 }

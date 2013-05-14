@@ -36,7 +36,7 @@ public class RoxelUpdatePollingContainer {
     @SpaceDataEvent
     public RoxelUpdate eventListener(RoxelUpdate event) {
     	updater.performUpdate(event);
-    	// Return nothing since we don't want to write something back into the space -> this consumes the RoxelUpdate
+    	// return nothing since we don't want to write something back into the space -> this consumes the RoxelUpdate
         return null;
     }
 

@@ -1,12 +1,6 @@
 package de.haw.tt2p.trafficcoordination.game;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import org.openspaces.core.GigaSpace;
-
-import com.google.common.collect.Lists;
 
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
 import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
@@ -40,6 +34,13 @@ public class Driver extends Thread {
 	private final int speed = 1000;
 	private final GigaSpace gigaSpace;
 	private final Integer carId;
+	private Point preferredPosition;
+
+	public Driver(GigaSpace gigaSpace, Integer carId, Point preferredPosition) {
+		this.gigaSpace = gigaSpace;
+		this.carId = carId;
+		this.preferredPosition = preferredPosition;
+	}
 
 	public Driver(GigaSpace gigaSpace, Integer carId) {
 		this.gigaSpace = gigaSpace;
@@ -54,13 +55,11 @@ public class Driver extends Thread {
 			myRoxelTemplate.setCurrentCarId(carId);
 			Roxel myRoxel = gigaSpace.take(myRoxelTemplate);
 			if (myRoxel != null) {
-				Roxel findNextTemplate = new Roxel();
 				Point nextRoxelPosition = getNextRoxelPosition(myRoxel);
-				findNextTemplate.setX(nextRoxelPosition.getX());
-				findNextTemplate.setY(nextRoxelPosition.getY());
-				Roxel nextRoxel = gigaSpace.take(findNextTemplate, Integer.MAX_VALUE);
+				Roxel nextRoxel = getNextRoxel(nextRoxelPosition, myRoxel.getCurrentDirection());
 				if (!nextRoxel.hasCar()) {
 					myRoxel.removeCar();
+					myRoxel.resetCurrentDirection();
 					nextRoxel.setCurrentCarId(carId);
 					// write roxel update for the gui
 					gigaSpace.write(new RoxelUpdate(carId, myRoxel.getX(), myRoxel.getY(), nextRoxel.getX(), nextRoxel.getY()));
@@ -81,31 +80,32 @@ public class Driver extends Thread {
 	private Point getNextRoxelPosition(Roxel roxel) {
 		int x = roxel.getX();
 		int y = roxel.getY();
-		Set<Direction> possibleDirections = roxel.getPossibleDirections();
-		List<Point> nextPossibleRoxelPositions = Lists.newArrayList();
+		Direction currentDirection = roxel.getCurrentDirection();
+
+		Point nextRoxelPosition;
 		RoxelStructure roxelStructure = gigaSpace.read(new RoxelStructure());
 		int width = roxelStructure.getWidth();
 		int height = roxelStructure.getHeight();
 
-		if (possibleDirections.contains(Direction.NORTH)) {
-			int northY = y - 1;
-			nextPossibleRoxelPositions.add(new Point(x, northY < 0 ? height - 1 : northY));
-		}
-		if (possibleDirections.contains(Direction.EAST)) {
+		if (currentDirection == Direction.EAST) {
 			int eastX = x + 1;
-			nextPossibleRoxelPositions.add(new Point(eastX > width - 1 ? 0 : eastX, y));
-		}
-		if (possibleDirections.contains(Direction.SOUTH)) {
+			nextRoxelPosition = new Point(eastX > width - 1 ? 0 : eastX, y);
+		} else {
 			int southY = y + 1;
-			nextPossibleRoxelPositions.add(new Point(x, southY > height - 1 ? 0 : southY));
-		}
-		if (possibleDirections.contains(Direction.WEST)) {
-			int westX = x - 1;
-			nextPossibleRoxelPositions.add(new Point(westX < 0 ? width - 1 : westX, y));
+			nextRoxelPosition = new Point(x, southY > height - 1 ? 0 : southY);
 		}
 
-		int random = new Random().nextInt(nextPossibleRoxelPositions.size());
-		return nextPossibleRoxelPositions.get(random);
+		return nextRoxelPosition;
+	}
+
+	private Roxel getNextRoxel(Point position, Direction direction) {
+		Roxel findNextTemplate = new Roxel();
+		findNextTemplate.setX(position.getX());
+		findNextTemplate.setY(position.getY());
+		findNextTemplate.setCurrentDirection(direction);
+		Roxel nextRoxel = gigaSpace.take(findNextTemplate, Integer.MAX_VALUE);
+
+		return nextRoxel;
 	}
 
 	/**
@@ -114,6 +114,11 @@ public class Driver extends Thread {
 	private void init() {
 		Roxel template = new Roxel();
 		template.setType(Roxel.Type.STREET);
+		template.setCrossroad(false);
+		if (preferredPosition != null) {
+			template.setX(preferredPosition.getX());
+			template.setY(preferredPosition.getY());
+		}
 		Roxel roxel = gigaSpace.take(template);
 		if (!roxel.hasCar()) {
 			roxel.setCurrentCarId(carId);
