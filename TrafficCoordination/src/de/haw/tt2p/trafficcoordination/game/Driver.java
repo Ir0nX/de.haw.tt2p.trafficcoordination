@@ -62,7 +62,8 @@ public class Driver extends Thread {
 					myRoxel.resetCurrentDirection();
 					nextRoxel.setCurrentCarId(carId);
 					// write roxel update for the gui
-					gigaSpace.write(new RoxelUpdate(carId, myRoxel.getX(), myRoxel.getY(), nextRoxel.getX(), nextRoxel.getY()));
+					gigaSpace.write(new RoxelUpdate(carId, myRoxel.getX(), myRoxel.getY(),
+						nextRoxel.getX(), nextRoxel.getY(), nextRoxel.getCurrentDirection()));
 				}
 				gigaSpace.write(myRoxel);
 				gigaSpace.write(nextRoxel);
@@ -123,7 +124,8 @@ public class Driver extends Thread {
 		if (!roxel.hasCar()) {
 			roxel.setCurrentCarId(carId);
 			gigaSpace.write(roxel);
-			gigaSpace.write(new RoxelUpdate(carId, -1, -1, roxel.getX(), roxel.getY()));
+			gigaSpace.write(new RoxelUpdate(carId, -1, -1,
+				roxel.getX(), roxel.getY(), roxel.getCurrentDirection()));
 			log("finished initialize");
 		} else {
 			gigaSpace.write(roxel);

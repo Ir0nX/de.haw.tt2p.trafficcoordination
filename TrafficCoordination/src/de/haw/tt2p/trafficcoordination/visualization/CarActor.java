@@ -5,7 +5,7 @@ import ch.aplu.jgamegrid.Actor;
 public class CarActor extends Actor {
 
 	public CarActor(int carId) {
-		super(getSprite(carId));
+		super(true, getSprite(carId));
 	}
 
 	/**

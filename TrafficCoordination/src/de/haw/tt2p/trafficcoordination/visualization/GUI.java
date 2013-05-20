@@ -14,6 +14,7 @@ import ch.aplu.jgamegrid.Location;
 import de.haw.tt2p.trafficcoordination.container.RoxelUpdatePollingContainer;
 import de.haw.tt2p.trafficcoordination.game.TrafficManager;
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
+import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
 import de.haw.tt2p.trafficcoordination.topology.Roxel.Type;
 import de.haw.tt2p.trafficcoordination.topology.RoxelStructure;
 
@@ -88,7 +89,8 @@ public class GUI extends GameGrid implements IGUIUpdater {
 		Integer carId = roxelUpdate.getCarId();
 		if (oldX == -1 || oldY == -1) {
 			CarActor car = new CarActor(carId);
-			addActor(car, new Location(newX, newY));
+			addActor(car, new Location(newX, newY),
+				roxelUpdate.getDirection() == Direction.SOUTH ? 90 : 0);
 		} else {
 			ArrayList<Actor> actorsAt = getActorsAt(new Location(oldX, oldY));
 			for (Actor actor : actorsAt) {

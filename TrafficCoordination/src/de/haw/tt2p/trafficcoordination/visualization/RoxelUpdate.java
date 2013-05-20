@@ -1,5 +1,7 @@
 package de.haw.tt2p.trafficcoordination.visualization;
 
+import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
+
 
 
 public class RoxelUpdate {
@@ -9,6 +11,7 @@ public class RoxelUpdate {
 	private Integer oldY;
 	private Integer newX;
 	private Integer newY;
+	private Direction direction;
 
 	/**
 	 * Necessary Default constructor.
@@ -16,12 +19,14 @@ public class RoxelUpdate {
 	public RoxelUpdate() {
 	}
 
-	public RoxelUpdate(Integer carId, Integer oldX, Integer oldY, Integer newX, Integer newY) {
+	public RoxelUpdate(Integer carId, Integer oldX, Integer oldY,
+		Integer newX, Integer newY, Direction direction) {
 		this.carId = carId;
 		this.oldX = oldX;
 		this.oldY = oldY;
 		this.newX = newX;
 		this.newY = newY;
+		this.direction = direction;
 	}
 
 	public Integer getCarId() {
@@ -62,6 +67,14 @@ public class RoxelUpdate {
 
 	public void setNewY(Integer newY) {
 		this.newY = newY;
+	}
+
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 }

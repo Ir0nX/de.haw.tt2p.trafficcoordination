@@ -3,6 +3,7 @@ package de.haw.tt2p.trafficcoordination.topology;
 import java.util.Set;
 
 import com.gigaspaces.annotation.pojo.SpaceId;
+import com.gigaspaces.annotation.pojo.SpaceRouting;
 
 /**
  * Roxels are the grid components of the map. They have specific types/functionality and may contain
@@ -26,6 +27,7 @@ public class Roxel {
 	private Set<Direction> possibleDirections;
 	private Direction currentDirection;
 	private Boolean isCrossroad;
+	private Integer spaceId;
 
 	/**
 	 * Necessary Default constructor.
@@ -42,6 +44,7 @@ public class Roxel {
 		this.possibleDirections = possibleDirections;
 		resetCurrentDirection();
 		isCrossroad = possibleDirections.size() > 1;
+		spaceId = y % 2;
 	}
 
 	@SpaceId
@@ -127,6 +130,15 @@ public class Roxel {
 		} else if (possibleDirections.size() > 1){
 			currentDirection = Direction.TODECIDE;
 		}
+	}
+
+	@SpaceRouting
+	Integer getSpaceId() {
+		return spaceId;
+	}
+
+	public void setSpaceId(Integer spaceId) {
+		this.spaceId = spaceId;
 	}
 
 	@Override

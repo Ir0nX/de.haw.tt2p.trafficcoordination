@@ -8,22 +8,22 @@ import org.openspaces.events.EventDriven;
 import org.openspaces.events.EventTemplate;
 import org.openspaces.events.adapter.SpaceDataEvent;
 import org.openspaces.events.notify.Notify;
-import org.openspaces.events.notify.NotifyType;
 
 import de.haw.tt2p.trafficcoordination.topology.Roxel;
 import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
 
 @EventDriven
 @Notify
-@NotifyType
 public class TrafficLightNotifyContainer {
 
 	private final GigaSpace gigaSpace;
 	private final Timer directionTimer;
+	private final Integer roxelId;
 	private Direction currentDirection = Direction.EAST;
 
-	public TrafficLightNotifyContainer(GigaSpace gigaSpace) {
+	public TrafficLightNotifyContainer(GigaSpace gigaSpace, Integer roxelId) {
 		this.gigaSpace = gigaSpace;
+		this.roxelId = roxelId;
 		directionTimer = new Timer();
 		TimerTask task = new TimerTask() {
 			@Override
@@ -38,15 +38,15 @@ public class TrafficLightNotifyContainer {
 				}
 				setNewDirection();
 			}
-
 		};
 		directionTimer.schedule(task, 5000, 5000);
 	}
 
 	@EventTemplate
-    Roxel unprocessedData() {
+	Roxel unprocessedData() {
         Roxel template = new Roxel();
         template.setCurrentDirection(Direction.TODECIDE);
+        template.setId(roxelId);
         return template;
     }
 

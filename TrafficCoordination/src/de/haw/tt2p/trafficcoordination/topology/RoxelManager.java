@@ -3,9 +3,11 @@ package de.haw.tt2p.trafficcoordination.topology;
 import java.util.Set;
 
 import org.openspaces.core.GigaSpace;
+import org.openspaces.events.notify.SimpleNotifyContainerConfigurer;
 
 import com.google.common.collect.Sets;
 
+import de.haw.tt2p.trafficcoordination.container.TrafficLightNotifyContainer;
 import de.haw.tt2p.trafficcoordination.topology.Roxel.Direction;
 
 /**
@@ -29,7 +31,7 @@ public class RoxelManager {
 		RoxelStructure template = new RoxelStructure();
 		RoxelStructure roxelStructure = gigaSpace.read(template);
 		if (roxelStructure == null) {
-			roxelStructure = new RoxelStructure(1, 12, 12, 64);
+			roxelStructure = new RoxelStructure(1, 10, 10, 64);
 			gigaSpace.write(roxelStructure);
 		}
 		init(roxelStructure.getWidth(), roxelStructure.getHeight());
@@ -72,6 +74,10 @@ public class RoxelManager {
 				Set<Direction> possibleDirections = getPossibleDirections(x, y);
 				Roxel.Type type = possibleDirections.isEmpty() ? Roxel.Type.HOUSE : Roxel.Type.STREET;
 				Roxel roxel = new Roxel(id, x, y, type, possibleDirections);
+				if (roxel.isCrossroad()) {
+					new SimpleNotifyContainerConfigurer(gigaSpace)
+					.eventListenerAnnotation(new TrafficLightNotifyContainer(gigaSpace, id)).notifyContainer();
+				}
 				gigaSpace.write(roxel);
 			}
 		}
